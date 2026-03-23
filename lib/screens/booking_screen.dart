@@ -156,7 +156,9 @@ class _BookingScreenState extends State<BookingScreen> {
       final result = await _apiService.bookAppointment(
         firstName: _firstNameCtrl.text.trim(),
         lastName: _lastNameCtrl.text.trim(),
-        middleName: _middleNameCtrl.text.trim().isEmpty ? null : _middleNameCtrl.text.trim(),
+        middleName: _middleNameCtrl.text.trim().isEmpty
+            ? null
+            : _middleNameCtrl.text.trim(),
         serviceId: widget.service.id,
         schedule: dateStr,
         scheduleTime: _selectedTimeSlot!,
@@ -435,8 +437,9 @@ class _BookingScreenState extends State<BookingScreen> {
               controller: _addressCtrl,
               decoration: _inputDecoration('Address *'),
               maxLines: 2,
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Address is required' : null,
+              validator: (v) => (v == null || v.trim().isEmpty)
+                  ? 'Address is required'
+                  : null,
             ),
             const SizedBox(height: 16),
 
@@ -485,15 +488,24 @@ class _BookingScreenState extends State<BookingScreen> {
                   flex: 2,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate() &&
-                          _dateOfBirth != null) {
+                      final formValid = _formKey.currentState!.validate();
+                      if (formValid && _dateOfBirth != null && _validIdFile != null) {
                         _goToStep(2);
-                      } else if (_dateOfBirth == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please select your date of birth.'),
-                          ),
-                        );
+                      } else {
+                        if (_dateOfBirth == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please select your date of birth.'),
+                            ),
+                          );
+                        }
+                        if (_validIdFile == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please upload a valid ID.'),
+                            ),
+                          );
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -553,9 +565,11 @@ class _BookingScreenState extends State<BookingScreen> {
                   const Divider(height: 24),
                   _reviewRow(
                     'Name',
-                    [_firstNameCtrl.text, _middleNameCtrl.text, _lastNameCtrl.text]
-                        .where((s) => s.trim().isNotEmpty)
-                        .join(' '),
+                    [
+                      _firstNameCtrl.text,
+                      _middleNameCtrl.text,
+                      _lastNameCtrl.text,
+                    ].where((s) => s.trim().isNotEmpty).join(' '),
                   ),
                   _reviewRow(
                     'Date of Birth',
