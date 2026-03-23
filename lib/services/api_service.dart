@@ -8,6 +8,7 @@ class ApiService {
   // For Chrome web (flutter run --device chrome), localhost:8000 is correct.
   static const String baseUrl = 'http://localhost:8000/api';
 
+  /// Fetch all active services.
   Future<List<Service>> fetchServices() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/services'));
@@ -26,6 +27,92 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Failed to load services: $e');
+    }
+  }
+
+  /// Fetch already-booked time slots for a given date.
+  Future<List<String>> fetchBookedTimes(String date) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/appointments/booked-times?date=$date'),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+        if (jsonResponse['success'] == true && jsonResponse['data'] != null) {
+          return List<String>.from(jsonResponse['data']);
+        }
+        return [];
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to load booked times: $e');
+    }
+  }
+
+  /// Book an appointment. Supports optional valid_id image upload.
+  Future<Map<String, dynamic>> bookAppointment({
+    required String firstName,
+    required String lastName,
+    String? middleName,
+    required int serviceId,
+    required String schedule,
+    required String scheduleTime,
+    required String dateOfBirth,
+    required String gender,
+    String? phone,
+    String? email,
+    String? address,
+    List<int>? validIdBytes,
+    String? validIdFilename,
+  }) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/appointments'));
+
+      request.fields['first_name'] = firstName;
+      request.fields['last_name'] = lastName;
+      if (middleName != null && middleName.isNotEmpty) {
+        request.fields['middle_name'] = middleName;
+      }
+      request.fields['service_id'] = serviceId.toString();
+      request.fields['schedule'] = schedule;
+      request.fields['schedule_time'] = scheduleTime;
+      request.fields['date_of_birth'] = dateOfBirth;
+      request.fields['gender'] = gender;
+      if (phone != null && phone.isNotEmpty) request.fields['phone'] = phone;
+      if (email != null && email.isNotEmpty) request.fields['email'] = email;
+      if (address != null && address.isNotEmpty) request.fields['address'] = address;
+
+      if (validIdBytes != null && validIdFilename != null) {
+        request.files.add(http.MultipartFile.fromBytes(
+          'valid_id',
+          validIdBytes,
+          filename: validIdFilename,
+        ));
+      }
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+      if (response.statusCode == 201 && jsonResponse['success'] == true) {
+        return jsonResponse['data'];
+      } else {
+        final message = jsonResponse['message'] ?? 'Booking failed';
+        final errors = jsonResponse['errors'];
+        String errorDetail = message;
+        if (errors is Map) {
+          errorDetail = errors.values
+              .expand((v) => v is List ? v : [v])
+              .join('\n');
+        }
+        throw Exception(errorDetail);
+      }
+    } catch (e) {
+      if (e is Exception) rethrow;
+      throw Exception('Failed to book appointment: $e');
     }
   }
 }
