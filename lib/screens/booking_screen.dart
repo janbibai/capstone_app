@@ -8,7 +8,6 @@ import 'booking_confirmation_screen.dart';
 
 class BookingScreen extends StatefulWidget {
   final Service service;
-
   const BookingScreen({super.key, required this.service});
 
   @override
@@ -72,7 +71,6 @@ class _BookingScreenState extends State<BookingScreen> {
       setState(() {
         _bookedSlots = booked;
         _loadingSlots = false;
-        // Reset selected slot if it's now booked
         if (_selectedTimeSlot != null &&
             _bookedSlots.contains(_selectedTimeSlot)) {
           _selectedTimeSlot = null;
@@ -96,11 +94,22 @@ class _BookingScreenState extends State<BookingScreen> {
       firstDate: now,
       lastDate: now.add(const Duration(days: 90)),
       helpText: 'Select appointment date',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF154C9E),
+              onPrimary: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
-        _selectedTimeSlot = null; // Reset time when date changes
+        _selectedTimeSlot = null;
       });
       await _loadBookedSlots(picked);
     }
@@ -114,6 +123,17 @@ class _BookingScreenState extends State<BookingScreen> {
       firstDate: DateTime(1920),
       lastDate: now.subtract(const Duration(days: 1)),
       helpText: 'Select date of birth',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFF154C9E),
+              onPrimary: Colors.white,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null) {
       setState(() => _dateOfBirth = picked);
@@ -186,7 +206,7 @@ class _BookingScreenState extends State<BookingScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toString().replaceFirst('Exception: ', '')),
-            backgroundColor: Colors.red,
+            backgroundColor: const Color(0xFFB91C1C),
             duration: const Duration(seconds: 4),
           ),
         );
@@ -227,17 +247,11 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      appBar: AppBar(
-        title: Text(widget.service.name),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black87,
-      ),
+      backgroundColor: const Color(0xFFF8FAFC),
       body: Column(
         children: [
-          StepIndicator(currentStep: _currentStep),
+          _buildHeader(),
+          _buildStepBar(),
           Expanded(
             child: PageView(
               controller: _pageController,
@@ -254,6 +268,95 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
+  Widget _buildHeader() {
+    const stepTitles = ['Schedule', 'Patient Details', 'Review & Confirm'];
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1)),
+      ),
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 8, 20, 8),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: _currentStep == 0
+                    ? () => Navigator.of(context).pop()
+                    : () => _goToStep(_currentStep - 1),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Color(0xFF334155),
+                  size: 18,
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      stepTitles[_currentStep],
+                      style: const TextStyle(
+                        fontFamily: 'Manrope',
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0F172A),
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    Text(
+                      widget.service.name,
+                      style: const TextStyle(
+                        fontFamily: 'Manrope',
+                        fontSize: 12,
+                        color: Color(0xFF64748B),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStepBar() {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+      child: Row(
+        children: List.generate(3, (index) {
+          final isActive = index == _currentStep;
+          final isDone = index < _currentStep;
+          return Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: isDone || isActive
+                          ? const Color(0xFF154C9E)
+                          : const Color(0xFFE2E8F0),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                if (index < 2) const SizedBox(width: 4),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   // ─── Step 1: Date & Time ─────────────────────────────────────────────
   Widget _buildStep1DateAndTime() {
     return SingleChildScrollView(
@@ -261,82 +364,123 @@ class _BookingScreenState extends State<BookingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Select Date',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
+          // Section label
+          _sectionLabel('Select Date'),
           const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: _pickDate,
-              icon: const Icon(Icons.calendar_today_rounded),
-              label: Text(
-                _selectedDate != null
-                    ? _formatDate(_selectedDate!)
-                    : 'Tap to pick a date',
-              ),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          GestureDetector(
+            onTap: _pickDate,
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: _selectedDate != null
+                      ? const Color(0xFF154C9E).withOpacity(0.4)
+                      : const Color(0xFFE2E8F0),
                 ),
               ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.calendar_today_rounded,
+                      color: Color(0xFF154C9E),
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Appointment Date',
+                          style: TextStyle(
+                            fontFamily: 'Manrope',
+                            fontSize: 12,
+                            color: Color(0xFF94A3B8),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          _selectedDate != null
+                              ? _formatDate(_selectedDate!)
+                              : 'Tap to select a date',
+                          style: TextStyle(
+                            fontFamily: 'Manrope',
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: _selectedDate != null
+                                ? const Color(0xFF0F172A)
+                                : const Color(0xFF94A3B8),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: Color(0xFF94A3B8),
+                    size: 20,
+                  ),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 28),
 
           if (_selectedDate != null) ...[
-            Text(
-              'Select Time',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
+            _sectionLabel('Select Time'),
             const SizedBox(height: 4),
-            Text(
-              'Grey slots are already booked.',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
+            const Text(
+              'Greyed-out slots are already booked.',
+              style: TextStyle(
+                fontFamily: 'Manrope',
+                fontSize: 13,
+                color: Color(0xFF94A3B8),
+              ),
             ),
             const SizedBox(height: 12),
             if (_loadingSlots)
-              const Center(child: CircularProgressIndicator())
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32),
+                  child: CircularProgressIndicator(
+                    color: Color(0xFF154C9E),
+                    strokeWidth: 2.5,
+                  ),
+                ),
+              )
             else
               TimeSlotGrid(
                 bookedSlots: _bookedSlots,
                 selectedSlot: _selectedTimeSlot,
-                onSlotSelected: (slot) {
-                  setState(() => _selectedTimeSlot = slot);
-                },
+                onSlotSelected: (slot) =>
+                    setState(() => _selectedTimeSlot = slot),
               ),
           ],
 
           const SizedBox(height: 32),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: (_selectedDate != null && _selectedTimeSlot != null)
-                  ? () => _goToStep(1)
-                  : null,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text('Next: Patient Information'),
-            ),
+          _primaryButton(
+            label: 'Next: Patient Details',
+            onPressed: (_selectedDate != null && _selectedTimeSlot != null)
+                ? () => _goToStep(1)
+                : null,
           ),
         ],
       ),
     );
   }
 
-  // ─── Step 2: Patient Info ────────────────────────────────────────────
+  // ─── Step 2: Patient Info ─────────────────────────────────────────────
   Widget _buildStep2PatientInfo() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -345,157 +489,258 @@ class _BookingScreenState extends State<BookingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Patient Details',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
+            _sectionLabel('Personal Information'),
+            const SizedBox(height: 14),
 
-            // First name
-            TextFormField(
+            _filledField(
               controller: _firstNameCtrl,
-              decoration: _inputDecoration('First Name *'),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+              label: 'First Name',
+              required: true,
             ),
-            const SizedBox(height: 12),
-
-            // Middle name (optional)
-            TextFormField(
+            const SizedBox(height: 10),
+            _filledField(
               controller: _middleNameCtrl,
-              decoration: _inputDecoration('Middle Name (optional)'),
+              label: 'Middle Name',
+              hint: 'Optional',
             ),
-            const SizedBox(height: 12),
-
-            // Last name
-            TextFormField(
+            const SizedBox(height: 10),
+            _filledField(
               controller: _lastNameCtrl,
-              decoration: _inputDecoration('Last Name *'),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Required' : null,
+              label: 'Last Name',
+              required: true,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // Date of birth
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: _pickDateOfBirth,
-                icon: const Icon(Icons.cake_rounded, size: 18),
-                label: Text(
-                  _dateOfBirth != null
-                      ? 'Date of Birth: ${_formatDate(_dateOfBirth!)}'
-                      : 'Select Date of Birth *',
+            GestureDetector(
+              onTap: _pickDateOfBirth,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
                 ),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.cake_rounded,
+                      size: 18,
+                      color: Color(0xFF64748B),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _dateOfBirth != null
+                            ? 'DOB: ${_formatDate(_dateOfBirth!)}'
+                            : 'Date of Birth *',
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: _dateOfBirth != null
+                              ? const Color(0xFF0F172A)
+                              : const Color(0xFF94A3B8),
+                        ),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Color(0xFF94A3B8),
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Gender dropdown
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFF8FAFC),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: DropdownButtonFormField<String>(
+                value: _gender,
+                decoration: InputDecoration(
+                  labelText: 'Gender',
+                  labelStyle: const TextStyle(
+                    fontFamily: 'Manrope',
+                    color: Color(0xFF64748B),
+                    fontSize: 14,
+                  ),
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xFFF8FAFC),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
                   ),
                 ),
+                style: const TextStyle(
+                  fontFamily: 'Manrope',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF0F172A),
+                ),
+                items: const [
+                  DropdownMenuItem(value: 'male', child: Text('Male')),
+                  DropdownMenuItem(value: 'female', child: Text('Female')),
+                  DropdownMenuItem(value: 'other', child: Text('Other')),
+                ],
+                onChanged: (v) {
+                  if (v != null) setState(() => _gender = v);
+                },
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 28),
 
-            // Gender
-            DropdownButtonFormField<String>(
-              value: _gender,
-              decoration: _inputDecoration('Gender *'),
-              items: const [
-                DropdownMenuItem(value: 'male', child: Text('Male')),
-                DropdownMenuItem(value: 'female', child: Text('Female')),
-                DropdownMenuItem(value: 'other', child: Text('Other')),
-              ],
-              onChanged: (v) {
-                if (v != null) setState(() => _gender = v);
-              },
-            ),
-            const SizedBox(height: 12),
+            _sectionLabel('Contact Information'),
+            const SizedBox(height: 14),
 
-            // Phone
-            TextFormField(
+            _filledField(
               controller: _phoneCtrl,
-              decoration: _inputDecoration('Phone *'),
+              label: 'Phone Number',
+              required: true,
               keyboardType: TextInputType.phone,
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Phone is required' : null,
+              prefixIcon: Icons.phone_rounded,
             ),
-            const SizedBox(height: 12),
-
-            // Email (optional)
-            TextFormField(
+            const SizedBox(height: 10),
+            _filledField(
               controller: _emailCtrl,
-              decoration: _inputDecoration('Email (optional)'),
+              label: 'Email Address',
+              hint: 'Optional',
               keyboardType: TextInputType.emailAddress,
+              prefixIcon: Icons.email_rounded,
+            ),
+            const SizedBox(height: 10),
+            _filledField(
+              controller: _addressCtrl,
+              label: 'Home Address',
+              required: true,
+              maxLines: 2,
+              prefixIcon: Icons.location_on_rounded,
+            ),
+            const SizedBox(height: 28),
+
+            _sectionLabel('ID Verification'),
+            const SizedBox(height: 4),
+            const Text(
+              'A valid government ID is required for verification.',
+              style: TextStyle(
+                fontFamily: 'Manrope',
+                fontSize: 13,
+                color: Color(0xFF94A3B8),
+                height: 1.4,
+              ),
             ),
             const SizedBox(height: 12),
 
-            // Address
-            TextFormField(
-              controller: _addressCtrl,
-              decoration: _inputDecoration('Address *'),
-              maxLines: 2,
-              validator: (v) => (v == null || v.trim().isEmpty)
-                  ? 'Address is required'
-                  : null,
-            ),
-            const SizedBox(height: 16),
-
-            // Valid ID upload
-            Text(
-              'Valid ID (Required)',
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              onPressed: _pickValidId,
-              icon: const Icon(Icons.upload_file_rounded, size: 18),
-              label: Text(
-                _validIdFile != null
-                    ? _validIdFile!.name
-                    : 'Upload ID photo (JPEG/PNG)',
-              ),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            // ID Upload area
+            GestureDetector(
+              onTap: _pickValidId,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: _validIdFile != null
+                      ? const Color(0xFFECFDF5)
+                      : const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: _validIdFile != null
+                        ? const Color(0xFF86EFAC)
+                        : const Color(0xFFE2E8F0),
+                    width: 1.5,
+                    style: BorderStyle.solid,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: _validIdFile != null
+                            ? const Color(0xFFDCFCE7)
+                            : const Color(0xFFEFF6FF),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        _validIdFile != null
+                            ? Icons.check_circle_rounded
+                            : Icons.upload_file_rounded,
+                        color: _validIdFile != null
+                            ? const Color(0xFF0D7E4E)
+                            : const Color(0xFF154C9E),
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _validIdFile != null
+                          ? _validIdFile!.name
+                          : 'Tap to upload ID photo',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Manrope',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: _validIdFile != null
+                            ? const Color(0xFF0D7E4E)
+                            : const Color(0xFF154C9E),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _validIdFile != null
+                          ? 'Tap to change'
+                          : 'JPEG or PNG accepted',
+                      style: const TextStyle(
+                        fontFamily: 'Manrope',
+                        fontSize: 12,
+                        color: Color(0xFF94A3B8),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
             const SizedBox(height: 32),
 
-            // Navigation buttons
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
+                  child: _outlinedButton(
+                    label: 'Back',
                     onPressed: () => _goToStep(0),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Back'),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   flex: 2,
-                  child: ElevatedButton(
+                  child: _primaryButton(
+                    label: 'Next: Review',
                     onPressed: () {
                       final formValid = _formKey.currentState!.validate();
-                      if (formValid && _dateOfBirth != null && _validIdFile != null) {
+                      if (formValid &&
+                          _dateOfBirth != null &&
+                          _validIdFile != null) {
                         _goToStep(2);
                       } else {
                         if (_dateOfBirth == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Please select your date of birth.'),
+                              content: Text(
+                                'Please select your date of birth.',
+                              ),
                             ),
                           );
                         }
@@ -508,13 +753,6 @@ class _BookingScreenState extends State<BookingScreen> {
                         }
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Next: Review & Confirm'),
                   ),
                 ),
               ],
@@ -525,111 +763,123 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // ─── Step 3: Confirmation ────────────────────────────────────────────
+  // ─── Step 3: Confirmation ─────────────────────────────────────────────
   Widget _buildStep3Confirmation() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Review Your Booking',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          _sectionLabel('Appointment Details'),
+          const SizedBox(height: 12),
+          _reviewCard(
+            children: [
+              _reviewRow(
+                Icons.medical_services_rounded,
+                'Service',
+                widget.service.name,
+              ),
+              if (widget.service.department != null)
+                _reviewRow(
+                  Icons.business_rounded,
+                  'Department',
+                  widget.service.department!.name,
+                ),
+              _reviewRow(
+                Icons.calendar_today_rounded,
+                'Date',
+                _selectedDate != null ? _formatDate(_selectedDate!) : '',
+              ),
+              _reviewRow(
+                Icons.schedule_rounded,
+                'Time',
+                _selectedTimeSlot != null
+                    ? _formatTo12Hour(_selectedTimeSlot!)
+                    : '',
+              ),
+            ],
           ),
           const SizedBox(height: 16),
 
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
-            elevation: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  _reviewRow('Service', widget.service.name),
-                  if (widget.service.department != null)
-                    _reviewRow('Department', widget.service.department!.name),
-                  _reviewRow(
-                    'Date',
-                    _selectedDate != null ? _formatDate(_selectedDate!) : '',
-                  ),
-                  _reviewRow(
-                    'Time',
-                    _selectedTimeSlot != null
-                        ? _formatTo12Hour(_selectedTimeSlot!)
-                        : '',
-                  ),
-                  const Divider(height: 24),
-                  _reviewRow(
-                    'Name',
-                    [
-                      _firstNameCtrl.text,
-                      _middleNameCtrl.text,
-                      _lastNameCtrl.text,
-                    ].where((s) => s.trim().isNotEmpty).join(' '),
-                  ),
-                  _reviewRow(
-                    'Date of Birth',
-                    _dateOfBirth != null ? _formatDate(_dateOfBirth!) : '',
-                  ),
-                  _reviewRow(
-                    'Gender',
-                    _gender[0].toUpperCase() + _gender.substring(1),
-                  ),
-                  if (_phoneCtrl.text.isNotEmpty)
-                    _reviewRow('Phone', _phoneCtrl.text),
-                  if (_emailCtrl.text.isNotEmpty)
-                    _reviewRow('Email', _emailCtrl.text),
-                  if (_addressCtrl.text.isNotEmpty)
-                    _reviewRow('Address', _addressCtrl.text),
-                  if (_validIdFile != null)
-                    _reviewRow('ID Uploaded', _validIdFile!.name),
-                ],
+          _sectionLabel('Patient Information'),
+          const SizedBox(height: 12),
+          _reviewCard(
+            children: [
+              _reviewRow(
+                Icons.person_rounded,
+                'Full Name',
+                [
+                  _firstNameCtrl.text,
+                  _middleNameCtrl.text,
+                  _lastNameCtrl.text,
+                ].where((s) => s.trim().isNotEmpty).join(' '),
               ),
-            ),
+              _reviewRow(
+                Icons.cake_rounded,
+                'Date of Birth',
+                _dateOfBirth != null ? _formatDate(_dateOfBirth!) : '',
+              ),
+              _reviewRow(
+                Icons.wc_rounded,
+                'Gender',
+                _gender[0].toUpperCase() + _gender.substring(1),
+              ),
+              if (_phoneCtrl.text.isNotEmpty)
+                _reviewRow(Icons.phone_rounded, 'Phone', _phoneCtrl.text),
+              if (_emailCtrl.text.isNotEmpty)
+                _reviewRow(Icons.email_rounded, 'Email', _emailCtrl.text),
+              if (_addressCtrl.text.isNotEmpty)
+                _reviewRow(
+                  Icons.location_on_rounded,
+                  'Address',
+                  _addressCtrl.text,
+                ),
+              if (_validIdFile != null)
+                _reviewRow(Icons.badge_rounded, 'Valid ID', _validIdFile!.name),
+            ],
           ),
           const SizedBox(height: 32),
 
-          // Navigation buttons
           Row(
             children: [
               Expanded(
-                child: OutlinedButton(
+                child: _outlinedButton(
+                  label: 'Back',
                   onPressed: _isSubmitting ? null : () => _goToStep(1),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text('Back'),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 flex: 2,
-                child: ElevatedButton.icon(
-                  onPressed: _isSubmitting ? null : _submitBooking,
-                  icon: _isSubmitting
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.check_circle_outline_rounded),
-                  label: Text(_isSubmitting ? 'Booking...' : 'Confirm Booking'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: Colors.green.shade600,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  height: 52,
+                  child: ElevatedButton.icon(
+                    onPressed: _isSubmitting ? null : _submitBooking,
+                    icon: _isSubmitting
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.check_circle_rounded, size: 20),
+                    label: Text(
+                      _isSubmitting ? 'Booking...' : 'Confirm Booking',
+                      style: const TextStyle(
+                        fontFamily: 'Manrope',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0D7E4E),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                   ),
                 ),
@@ -641,23 +891,64 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  Widget _reviewRow(String label, String value) {
+  // ─── Shared Widgets ──────────────────────────────────────────────────
+
+  Widget _sectionLabel(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontFamily: 'Manrope',
+        fontSize: 13,
+        fontWeight: FontWeight.w700,
+        color: Color(0xFF64748B),
+        letterSpacing: 0.6,
+      ),
+    );
+  }
+
+  Widget _reviewCard({required List<Widget> children}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(children: children),
+      ),
+    );
+  }
+
+  Widget _reviewRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Icon(icon, size: 16, color: const Color(0xFF94A3B8)),
+          const SizedBox(width: 10),
           SizedBox(
-            width: 110,
+            width: 100,
             child: Text(
               label,
-              style: TextStyle(color: Colors.grey[600], fontSize: 14),
+              style: const TextStyle(
+                fontFamily: 'Manrope',
+                fontSize: 13,
+                color: Color(0xFF64748B),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              style: const TextStyle(
+                fontFamily: 'Manrope',
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF0F172A),
+              ),
             ),
           ),
         ],
@@ -665,11 +956,109 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  InputDecoration _inputDecoration(String label) {
-    return InputDecoration(
-      labelText: label,
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+  Widget _filledField({
+    required TextEditingController controller,
+    required String label,
+    String? hint,
+    bool required = false,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+    IconData? prefixIcon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      style: const TextStyle(
+        fontFamily: 'Manrope',
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: Color(0xFF0F172A),
+      ),
+      decoration: InputDecoration(
+        labelText: required ? '$label *' : label,
+        hintText: hint,
+        labelStyle: const TextStyle(
+          fontFamily: 'Manrope',
+          color: Color(0xFF94A3B8),
+          fontSize: 14,
+        ),
+        prefixIcon: prefixIcon != null
+            ? Icon(prefixIcon, size: 18, color: const Color(0xFF94A3B8))
+            : null,
+        filled: true,
+        fillColor: const Color(0xFFF8FAFC),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFF154C9E), width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFDC2626), width: 1),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
+      ),
+      validator: required
+          ? (v) => (v == null || v.trim().isEmpty) ? '$label is required' : null
+          : null,
+    );
+  }
+
+  Widget _primaryButton({required String label, VoidCallback? onPressed}) {
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF154C9E),
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: const Color(0xFFE2E8F0),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'Manrope',
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _outlinedButton({required String label, VoidCallback? onPressed}) {
+    return SizedBox(
+      height: 52,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          foregroundColor: const Color(0xFF334155),
+          side: const BorderSide(color: Color(0xFFE2E8F0), width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'Manrope',
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
     );
   }
 }
