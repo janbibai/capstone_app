@@ -19,13 +19,13 @@ class _BookingScreenState extends State<BookingScreen> {
   final PageController _pageController = PageController();
   int _currentStep = 0;
 
-  // Step 1 — Date & Time
+  // Step 1 â€” Date & Time
   DateTime? _selectedDate;
   String? _selectedTimeSlot;
   List<String> _bookedSlots = [];
   bool _loadingSlots = false;
 
-  // Step 2 — Patient Info
+  // Step 2 â€” Patient Info
   final _formKey = GlobalKey<FormState>();
   final _firstNameCtrl = TextEditingController();
   final _middleNameCtrl = TextEditingController();
@@ -38,7 +38,7 @@ class _BookingScreenState extends State<BookingScreen> {
   XFile? _validIdFile;
   List<int>? _validIdBytes;
 
-  // Step 3 — Submission
+  // Step 3 â€” Submission
   bool _isSubmitting = false;
 
   @override
@@ -298,7 +298,6 @@ class _BookingScreenState extends State<BookingScreen> {
                     Text(
                       stepTitles[_currentStep],
                       style: const TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0F172A),
@@ -308,7 +307,6 @@ class _BookingScreenState extends State<BookingScreen> {
                     Text(
                       widget.service.name,
                       style: const TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 12,
                         color: Color(0xFF64748B),
                         fontWeight: FontWeight.w500,
@@ -357,7 +355,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // ─── Step 1: Date & Time ─────────────────────────────────────────────
+  // â”€â”€â”€ Step 1: Date & Time â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStep1DateAndTime() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -404,7 +402,6 @@ class _BookingScreenState extends State<BookingScreen> {
                         const Text(
                           'Appointment Date',
                           style: TextStyle(
-                            fontFamily: 'Manrope',
                             fontSize: 12,
                             color: Color(0xFF94A3B8),
                             fontWeight: FontWeight.w500,
@@ -415,7 +412,6 @@ class _BookingScreenState extends State<BookingScreen> {
                               ? _formatDate(_selectedDate!)
                               : 'Tap to select a date',
                           style: TextStyle(
-                            fontFamily: 'Manrope',
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: _selectedDate != null
@@ -443,7 +439,6 @@ class _BookingScreenState extends State<BookingScreen> {
             const Text(
               'Greyed-out slots are already booked.',
               style: TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 13,
                 color: Color(0xFF94A3B8),
               ),
@@ -480,7 +475,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // ─── Step 2: Patient Info ─────────────────────────────────────────────
+  // â”€â”€â”€ Step 2: Patient Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStep2PatientInfo() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -538,7 +533,6 @@ class _BookingScreenState extends State<BookingScreen> {
                             ? 'DOB: ${_formatDate(_dateOfBirth!)}'
                             : 'Date of Birth *',
                         style: TextStyle(
-                          fontFamily: 'Manrope',
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: _dateOfBirth != null
@@ -569,7 +563,6 @@ class _BookingScreenState extends State<BookingScreen> {
                 decoration: InputDecoration(
                   labelText: 'Gender',
                   labelStyle: const TextStyle(
-                    fontFamily: 'Manrope',
                     color: Color(0xFF64748B),
                     fontSize: 14,
                   ),
@@ -585,7 +578,6 @@ class _BookingScreenState extends State<BookingScreen> {
                   ),
                 ),
                 style: const TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF0F172A),
@@ -635,7 +627,6 @@ class _BookingScreenState extends State<BookingScreen> {
             const Text(
               'A valid government ID is required for verification.',
               style: TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 13,
                 color: Color(0xFF94A3B8),
                 height: 1.4,
@@ -690,7 +681,6 @@ class _BookingScreenState extends State<BookingScreen> {
                           : 'Tap to upload ID photo',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: _validIdFile != null
@@ -704,7 +694,6 @@ class _BookingScreenState extends State<BookingScreen> {
                           ? 'Tap to change'
                           : 'JPEG or PNG accepted',
                       style: const TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 12,
                         color: Color(0xFF94A3B8),
                       ),
@@ -763,7 +752,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // ─── Step 3: Confirmation ─────────────────────────────────────────────
+  // â”€â”€â”€ Step 3: Confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _buildStep3Confirmation() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -868,7 +857,6 @@ class _BookingScreenState extends State<BookingScreen> {
                     label: Text(
                       _isSubmitting ? 'Booking...' : 'Confirm Booking',
                       style: const TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),
@@ -891,13 +879,12 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // ─── Shared Widgets ──────────────────────────────────────────────────
+  // â”€â”€â”€ Shared Widgets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   Widget _sectionLabel(String text) {
     return Text(
       text,
       style: const TextStyle(
-        fontFamily: 'Manrope',
         fontSize: 13,
         fontWeight: FontWeight.w700,
         color: Color(0xFF64748B),
@@ -933,7 +920,6 @@ class _BookingScreenState extends State<BookingScreen> {
             child: Text(
               label,
               style: const TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 13,
                 color: Color(0xFF64748B),
                 fontWeight: FontWeight.w500,
@@ -944,7 +930,6 @@ class _BookingScreenState extends State<BookingScreen> {
             child: Text(
               value,
               style: const TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF0F172A),
@@ -970,7 +955,6 @@ class _BookingScreenState extends State<BookingScreen> {
       keyboardType: keyboardType,
       maxLines: maxLines,
       style: const TextStyle(
-        fontFamily: 'Manrope',
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: Color(0xFF0F172A),
@@ -979,7 +963,6 @@ class _BookingScreenState extends State<BookingScreen> {
         labelText: required ? '$label *' : label,
         hintText: hint,
         labelStyle: const TextStyle(
-          fontFamily: 'Manrope',
           color: Color(0xFF94A3B8),
           fontSize: 14,
         ),
@@ -1029,7 +1012,6 @@ class _BookingScreenState extends State<BookingScreen> {
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Manrope',
             fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
@@ -1053,7 +1035,6 @@ class _BookingScreenState extends State<BookingScreen> {
         child: Text(
           label,
           style: const TextStyle(
-            fontFamily: 'Manrope',
             fontSize: 15,
             fontWeight: FontWeight.w600,
           ),

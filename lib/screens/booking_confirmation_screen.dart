@@ -26,15 +26,14 @@ class BookingConfirmationScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 24),
 
-              // ── Success Badge ──────────────────────────────────────
+              // â”€â”€ Success Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _buildSuccessBadge(),
               const SizedBox(height: 24),
 
-              // ── Title ─────────────────────────────────────────────
+              // â”€â”€ Title â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               const Text(
                 'Booking Confirmed!',
                 style: TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF0F172A),
@@ -46,7 +45,6 @@ class BookingConfirmationScreen extends StatelessWidget {
                 'Your appointment has been successfully\nscheduled.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 14,
                   color: Color(0xFF64748B),
                   height: 1.5,
@@ -54,7 +52,7 @@ class BookingConfirmationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
 
-              // ── Queue Number Hero Card ─────────────────────────────
+              // â”€â”€ Queue Number Hero Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _buildQueueHeroCard(
                 context,
                 queueFormatted,
@@ -63,11 +61,11 @@ class BookingConfirmationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // ── Service Detail Card ────────────────────────────────
+              // â”€â”€ Service Detail Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               _buildDetailCard(),
               const SizedBox(height: 40),
 
-              // ── Back to Home CTA ───────────────────────────────────
+              // â”€â”€ Back to Home CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -79,7 +77,6 @@ class BookingConfirmationScreen extends StatelessWidget {
                   label: const Text(
                     'Back to Home',
                     style: TextStyle(
-                      fontFamily: 'Manrope',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                     ),
@@ -99,7 +96,6 @@ class BookingConfirmationScreen extends StatelessWidget {
                 'Please arrive 10 minutes before your schedule.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 12,
                   color: Color(0xFF94A3B8),
                   height: 1.4,
@@ -168,7 +164,6 @@ class BookingConfirmationScreen extends StatelessWidget {
             const Text(
               'YOUR QUEUE NUMBER',
               style: TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 color: Colors.white60,
@@ -179,7 +174,6 @@ class BookingConfirmationScreen extends StatelessWidget {
             Text(
               queueFormatted,
               style: const TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 64,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
@@ -222,7 +216,6 @@ class BookingConfirmationScreen extends StatelessWidget {
           Text(
             text,
             style: const TextStyle(
-              fontFamily: 'Manrope',
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -265,7 +258,6 @@ class BookingConfirmationScreen extends StatelessWidget {
                   const Text(
                     'Service',
                     style: TextStyle(
-                      fontFamily: 'Manrope',
                       fontSize: 12,
                       color: Color(0xFF94A3B8),
                       fontWeight: FontWeight.w500,
@@ -275,7 +267,6 @@ class BookingConfirmationScreen extends StatelessWidget {
                   Text(
                     service.name,
                     style: const TextStyle(
-                      fontFamily: 'Manrope',
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF0F172A),
@@ -285,7 +276,6 @@ class BookingConfirmationScreen extends StatelessWidget {
                     Text(
                       service.department!.name,
                       style: const TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 13,
                         color: Color(0xFF64748B),
                       ),

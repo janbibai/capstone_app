@@ -201,7 +201,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Text(
                       'Queue Status',
                       style: TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0F172A),
@@ -210,10 +209,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       _isToday(_selectedDate)
-                          ? 'Today · ${_formatShortDate(_selectedDate)}'
+                          ? 'Today Â· ${_formatShortDate(_selectedDate)}'
                           : _formatShortDate(_selectedDate),
                       style: const TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 12,
                         color: Color(0xFF64748B),
                         fontWeight: FontWeight.w500,
@@ -246,7 +244,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'Change Date',
                         style: TextStyle(
-                          fontFamily: 'Manrope',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF154C9E),
@@ -303,7 +300,6 @@ class _HomeScreenState extends State<HomeScreen> {
               label: const Text(
                 'Book an Appointment',
                 style: TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.1,
@@ -348,7 +344,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text(
               'Unable to load queue',
               style: TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF0F172A),
@@ -359,7 +354,6 @@ class _HomeScreenState extends State<HomeScreen> {
               _error!,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 14,
                 color: Color(0xFF64748B),
                 height: 1.5,
@@ -375,7 +369,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: const Text(
                   'Try Again',
                   style: TextStyle(
-                    fontFamily: 'Manrope',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -411,7 +404,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const Text(
                 'Queue List',
                 style: TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF0F172A),
@@ -431,7 +423,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     '${qs.appointments.length} entries',
                     style: const TextStyle(
-                      fontFamily: 'Manrope',
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF154C9E),
@@ -502,7 +493,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         hasServing ? 'Live' : 'Inactive',
                         style: const TextStyle(
-                          fontFamily: 'Manrope',
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -523,7 +513,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const Text(
               'Currently Serving',
               style: TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: Colors.white70,
@@ -532,9 +521,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              hasServing ? qs.currentServing!.queueNumberFormatted : '—',
+              hasServing ? qs.currentServing!.queueNumberFormatted : 'â€”',
               style: const TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 54,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
@@ -555,7 +543,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     qs.currentServing!.scheduleTime,
                     style: const TextStyle(
-                      fontFamily: 'Manrope',
                       fontSize: 13,
                       color: Colors.white70,
                       fontWeight: FontWeight.w500,
@@ -569,7 +556,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? 'No appointments scheduled for this date'
                     : 'Queue has not started yet',
                 style: const TextStyle(
-                  fontFamily: 'Manrope',
                   fontSize: 13,
                   color: Colors.white60,
                 ),
@@ -602,7 +588,6 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text(
             'No appointments',
             style: TextStyle(
-              fontFamily: 'Manrope',
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xFF334155),
@@ -613,7 +598,6 @@ class _HomeScreenState extends State<HomeScreen> {
             'There are no appointments scheduled\nfor this date.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Manrope',
               fontSize: 14,
               color: Color(0xFF94A3B8),
               height: 1.5,
@@ -667,7 +651,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   appt.queueNumber.toString(),
                   style: TextStyle(
-                    fontFamily: 'Manrope',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
                     color: isServing ? Colors.white : const Color(0xFF334155),
@@ -683,7 +666,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     appt.queueNumberFormatted,
                     style: const TextStyle(
-                      fontFamily: 'Manrope',
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
                       color: Color(0xFF0F172A),
@@ -701,7 +683,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         appt.scheduleTime,
                         style: const TextStyle(
-                          fontFamily: 'Manrope',
                           fontSize: 13,
                           color: Color(0xFF64748B),
                         ),
@@ -720,7 +701,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text(
                 _statusLabel(appt.status),
                 style: TextStyle(
-                  fontFamily: 'Manrope',
                   color: color,
                   fontWeight: FontWeight.w600,
                   fontSize: 12,

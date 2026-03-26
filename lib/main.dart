@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -15,12 +16,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0D47A1), // A professional blue
-          primary: const Color(0xFF0D47A1),
-          secondary: const Color(0xFF1976D2),
+          seedColor: const Color(0xFF154C9E),
+          primary: const Color(0xFF154C9E),
+          secondary: const Color(0xFF1E65CC),
         ),
         useMaterial3: true,
-        fontFamily: 'Inter', // Try to use a clean modern font
+        textTheme: GoogleFonts.manropeTextTheme(),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black87,

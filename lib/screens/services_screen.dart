@@ -135,7 +135,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     Text(
                       'Select a Service',
                       style: TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF0F172A),
@@ -145,7 +144,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     Text(
                       'Step 1 of 3',
                       style: TextStyle(
-                        fontFamily: 'Manrope',
                         fontSize: 12,
                         color: Color(0xFF94A3B8),
                         fontWeight: FontWeight.w500,
@@ -226,7 +224,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       Text(
                         service.name,
                         style: const TextStyle(
-                          fontFamily: 'Manrope',
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF0F172A),
@@ -238,7 +235,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                         Text(
                           service.department!.name,
                           style: const TextStyle(
-                            fontFamily: 'Manrope',
                             fontSize: 13,
                             color: Color(0xFF64748B),
                             fontWeight: FontWeight.w500,
@@ -261,7 +257,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   child: const Text(
                     'Book Now',
                     style: TextStyle(
-                      fontFamily: 'Manrope',
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF154C9E),
@@ -300,7 +295,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
             const Text(
               'Something went wrong',
               style: TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF0F172A),
@@ -311,7 +305,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
               errorMessage,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontFamily: 'Manrope',
                 fontSize: 14,
                 color: Color(0xFF64748B),
                 height: 1.5,
@@ -327,7 +320,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 label: const Text(
                   'Try Again',
                   style: TextStyle(
-                    fontFamily: 'Manrope',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -369,7 +361,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
           const Text(
             'No services available',
             style: TextStyle(
-              fontFamily: 'Manrope',
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xFF334155),
@@ -379,7 +370,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
           const Text(
             'Please check back later.',
             style: TextStyle(
-              fontFamily: 'Manrope',
               fontSize: 14,
               color: Color(0xFF94A3B8),
             ),
