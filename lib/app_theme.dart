@@ -16,55 +16,55 @@ class AppTheme {
   static const Color error = Color(0xFFB91C1C);
 
   static ThemeData get light {
-    // Base Manrope text theme from Google Fonts, then apply our color overrides
-    final manropeTextTheme = GoogleFonts.manropeTextTheme().copyWith(
-      displayLarge: GoogleFonts.manrope(
+    // Base Plus Jakarta Sans text theme from Google Fonts, then apply our color overrides
+    final jakartaTextTheme = GoogleFonts.plusJakartaSansTextTheme().copyWith(
+      displayLarge: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w800,
         color: textPrimary,
       ),
-      displayMedium: GoogleFonts.manrope(
+      displayMedium: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w800,
         color: textPrimary,
       ),
-      headlineLarge: GoogleFonts.manrope(
+      headlineLarge: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700,
         color: textPrimary,
       ),
-      headlineMedium: GoogleFonts.manrope(
+      headlineMedium: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700,
         color: textPrimary,
       ),
-      titleLarge: GoogleFonts.manrope(
+      titleLarge: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w700,
         color: textPrimary,
         fontSize: 18,
       ),
-      titleMedium: GoogleFonts.manrope(
+      titleMedium: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w600,
         color: textPrimary,
         fontSize: 16,
       ),
-      titleSmall: GoogleFonts.manrope(
+      titleSmall: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w600,
         color: textPrimary,
         fontSize: 14,
       ),
-      bodyLarge: GoogleFonts.manrope(
+      bodyLarge: GoogleFonts.plusJakartaSans(
         color: textPrimary,
         fontSize: 16,
         height: 1.6,
       ),
-      bodyMedium: GoogleFonts.manrope(
+      bodyMedium: GoogleFonts.plusJakartaSans(
         color: textSecondary,
         fontSize: 14,
         height: 1.5,
       ),
-      bodySmall: GoogleFonts.manrope(
+      bodySmall: GoogleFonts.plusJakartaSans(
         color: textMuted,
         fontSize: 12,
         height: 1.4,
       ),
-      labelLarge: GoogleFonts.manrope(
+      labelLarge: GoogleFonts.plusJakartaSans(
         fontWeight: FontWeight.w600,
         fontSize: 14,
       ),
@@ -72,7 +72,7 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
-      textTheme: manropeTextTheme, // ← Google Fonts handles the font loading
+      textTheme: jakartaTextTheme, // ← Google Fonts handles the font loading
       colorScheme: ColorScheme.fromSeed(
         seedColor: primary,
         primary: primary,
@@ -90,7 +90,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.manrope(
+        titleTextStyle: GoogleFonts.plusJakartaSans(
           fontSize: 17,
           fontWeight: FontWeight.w700,
           color: textPrimary,
@@ -108,7 +108,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
-          textStyle: GoogleFonts.manrope(
+          textStyle: GoogleFonts.plusJakartaSans(
             fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
@@ -124,7 +124,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
-          textStyle: GoogleFonts.manrope(
+          textStyle: GoogleFonts.plusJakartaSans(
             fontSize: 15,
             fontWeight: FontWeight.w600,
           ),
@@ -135,7 +135,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: primary,
-          textStyle: GoogleFonts.manrope(
+          textStyle: GoogleFonts.plusJakartaSans(
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -162,7 +162,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: error, width: 1.5),
         ),
-        labelStyle: GoogleFonts.manrope(color: textMuted, fontSize: 14),
+        labelStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 14),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
