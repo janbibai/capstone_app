@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/service.dart';
 import '../services/api_service.dart';
-import '../widgets/service_card.dart';
 import 'booking_screen.dart';
 
 class ServicesScreen extends StatefulWidget {
@@ -319,9 +318,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 icon: const Icon(Icons.refresh_rounded, size: 18),
                 label: const Text(
                   'Try Again',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF154C9E),
@@ -369,10 +366,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
           const SizedBox(height: 6),
           const Text(
             'Please check back later.',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFF94A3B8),
-            ),
+            style: TextStyle(fontSize: 14, color: Color(0xFF94A3B8)),
           ),
         ],
       ),

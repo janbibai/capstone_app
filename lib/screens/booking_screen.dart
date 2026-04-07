@@ -438,10 +438,7 @@ class _BookingScreenState extends State<BookingScreen> {
             const SizedBox(height: 4),
             const Text(
               'Greyed-out slots are already booked.',
-              style: TextStyle(
-                fontSize: 13,
-                color: Color(0xFF94A3B8),
-              ),
+              style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
             ),
             const SizedBox(height: 12),
             if (_loadingSlots)
@@ -559,7 +556,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: DropdownButtonFormField<String>(
-                value: _gender,
+                initialValue: _gender,
                 decoration: InputDecoration(
                   labelText: 'Gender',
                   labelStyle: const TextStyle(
@@ -962,10 +959,7 @@ class _BookingScreenState extends State<BookingScreen> {
       decoration: InputDecoration(
         labelText: required ? '$label *' : label,
         hintText: hint,
-        labelStyle: const TextStyle(
-          color: Color(0xFF94A3B8),
-          fontSize: 14,
-        ),
+        labelStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
         prefixIcon: prefixIcon != null
             ? Icon(prefixIcon, size: 18, color: const Color(0xFF94A3B8))
             : null,
@@ -1011,10 +1005,7 @@ class _BookingScreenState extends State<BookingScreen> {
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-          ),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -1034,10 +1025,7 @@ class _BookingScreenState extends State<BookingScreen> {
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
         ),
       ),
     );

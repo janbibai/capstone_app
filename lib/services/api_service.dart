@@ -127,8 +127,9 @@ class ApiService {
       request.fields['gender'] = gender;
       if (phone != null && phone.isNotEmpty) request.fields['phone'] = phone;
       if (email != null && email.isNotEmpty) request.fields['email'] = email;
-      if (address != null && address.isNotEmpty)
+      if (address != null && address.isNotEmpty) {
         request.fields['address'] = address;
+      }
 
       if (validIdBytes != null && validIdFilename != null) {
         request.files.add(
