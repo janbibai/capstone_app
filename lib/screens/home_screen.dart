@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       _isToday(_selectedDate)
-                          ? 'Today Â· ${_formatShortDate(_selectedDate)}'
+                          ? 'Today · ${_formatShortDate(_selectedDate)}'
                           : _formatShortDate(_selectedDate),
                       style: const TextStyle(
                         fontSize: 12,
@@ -521,7 +521,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 6),
             Text(
-              hasServing ? qs.currentServing!.queueNumberFormatted : 'â€”',
+              hasServing ? qs.currentServing!.queueNumberFormatted : '—',
               style: const TextStyle(
                 fontSize: 54,
                 fontWeight: FontWeight.w800,
