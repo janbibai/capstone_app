@@ -355,7 +355,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // â”€â”€â”€ Step 1: Date & Time â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  //Step 1: Date & Time
   Widget _buildStep1DateAndTime() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -472,7 +472,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // â”€â”€â”€ Step 2: Patient Info â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // Step 2: Patient Info
   Widget _buildStep2PatientInfo() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -749,7 +749,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // â”€â”€â”€ Step 3: Confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // Step 3: Confirmation
   Widget _buildStep3Confirmation() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -876,8 +876,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  // â”€â”€â”€ Shared Widgets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-
+  // Shared Widgets
   Widget _sectionLabel(String text) {
     return Text(
       text,
